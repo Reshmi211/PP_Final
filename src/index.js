@@ -341,7 +341,7 @@ app.post('/formsubmitted', async (req, res) => {
 
         const path = require("path");
 
-        const pythonScriptPath = path.join(__dirname, "../ML/predict_model.py");
+        const pythonScriptAbsolutePath = path.join(__dirname, "../ML/predict_model.py");
 
         const executeCommand = `python ${pythonScriptAbsolutePath} ${formDataString}`;
 
