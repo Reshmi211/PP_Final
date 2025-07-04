@@ -11,10 +11,8 @@ const collection2 = require("./mongodb");
 const formDataArray = [];
 const { exec }=require('child_process');
 const collection3 = require("./mongodb");
-require('dotenv').config();
-// const venvPath = '/Users/sasi_/ml/venv'; 
-// const pythonScriptPath = '/Users/sasi_/ml/basics/predict_model.py';
-// const pythonScriptPath = 'predict_model.py';
+require("dotenv").config({ path: "./.env" });
+
 const hbs = require('hbs');
 let userId;
 let pythonOp;

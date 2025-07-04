@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
-require('dotenv').config();
+require("dotenv").config({ path: "./.env" });
+
 async function connectToMongoDB() {
   try {
-    // await mongoose.connect("mongodb+srv://Charita:Charita077@cluster0.i1yqegl.mongodb.net/?retryWrites=true&w=majority",{
-    console.log("MongoDB URI:", process.env.MONGODB_URL);
+    
+    console.log("Env:", process.env.MONGODB_URL);
+    console.log("MongoDB URI (sanitized):", process.env.MONGODB_URL.replace(/:([^@]+)@/, ":***@"));
      await mongoose.connect(process.env.MONGODB_URL, {
-    // await mongoose.connect("mongodb+srv://Akash:Akash088@cluster0.i1yqegl.mongodb.net/?retryWrites=true&w=majority",{
+   
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
