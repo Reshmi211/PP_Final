@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 
 dataset_path = "C:\\Users\\CHARITHA BODIGE\\Desktop\\ML\\brfssdataset_dropped3.csv"
-
+#will this give error?
 # Load the dataset into a Pandas DataFrame
 df = pd.read_csv(dataset_path)
 
