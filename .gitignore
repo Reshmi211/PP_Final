@@ -1,0 +1,9 @@
+# Ignore node_modules everywhere in the project
+node_modules/
+
+# Ignore the .env file inside src
+src/.env
+
+# Optional: ignore system files you might not want
+.DS_Store
+Thumbs.db
