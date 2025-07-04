@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 const mongoose = require('mongoose');
 const collection2 = require("./mongodb");
 const formDataArray = [];
-const { exec }=require('child_process');
+const { exec } = require('child_process');
 const collection3 = require("./mongodb");
 require("dotenv").config({ path: "./.env" });
 
@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 let loginError = false;
-let signupError = false;  
+let signupError = false;
 
 
 app.get("/", (req, res) => {
@@ -89,7 +89,7 @@ app.post("/login", async (req, res) => {
             signupError = false;
             req.session.userId = check._id;
             console.log(check._id);
-            user_id=check._id;
+            user_id = check._id;
             return res.redirect(`/profile`);
         } else {
             loginError = true;
@@ -154,8 +154,8 @@ function getProfileImage(gender) {
         return 'male.png';
     } if (gender === 'Female') {
         return 'female.png';
-    } 
-    
+    }
+
 };
 app.get('/profile', async (req, res) => {
     try {
@@ -168,9 +168,9 @@ app.get('/profile', async (req, res) => {
                 res.render('details', { user });
             } else {
                 const formHistoryDates = user.formHistory.map(entry => entry.date);
-                testid=user.details[0]._id;
-                res.render('profile', { user,formHistoryDates });
-            } 
+                testid = user.details[0]._id;
+                res.render('profile', { user, formHistoryDates });
+            }
         } else {
             console.log('Invalid user ID');
             res.status(400).send('Invalid user ID');
@@ -199,12 +199,12 @@ app.get('/profile', async (req, res) => {
 //                 res.render('profile', { user, formHistoryDates});
 //                 */
 //                 const formHistoryObject = user.formHistory;
-        
+
 //                 // Convert the object into an array of objects
 //                 var formHistoryArray = Object.values(formHistoryObject);
 //                 console.log(typeof(formHistoryArray));
 //                 console.log(formHistoryArray);
-                
+
 //                 res.render('profile', { user, formHistoryArray });
 //             } 
 //         } else {
@@ -221,7 +221,7 @@ app.get('/profile', async (req, res) => {
 
 app.get("/question", (req, res) => {
     res.render('questions')
-    
+
 });
 
 
@@ -233,30 +233,28 @@ app.post('/formsubmitted', async (req, res) => {
         } else if (value == 0) {
             return 'No';
         } else {
-            return value; 
+            return value;
         }
     }
     function convertToYesNodia(value) {
         if (value == 1) {
-          return 'Borderline';
+            return 'Borderline';
         } else if (value == 0) {
-          return 'No';
+            return 'No';
         } else {
-          return 'Yes';
+            return 'Yes';
         }
-      }
-    function converttobinary(value)
-    {
-        if(value==="Male")
-        {
+    }
+    function converttobinary(value) {
+        if (value === "Male") {
             return 1;
         }
-        else{
+        else {
             return 0;
         }
     }
 
-    
+
     function classifyAge(age) {
         const ageRanges = {
             1: { min: 18, max: 24 },
@@ -273,26 +271,26 @@ app.post('/formsubmitted', async (req, res) => {
             12: { min: 75, max: 79 },
             13: { min: 80, max: Number.POSITIVE_INFINITY }
         };
-    
+
         for (const [range, limits] of Object.entries(ageRanges)) {
             if (age >= limits.min && age <= limits.max) {
-                return parseInt(range); 
+                return parseInt(range);
             }
         }
     }
     try {
-        const userdat= await collection3.findById(user_id).exec();
-        const details=userdat[0];
+        const userdat = await collection3.findById(user_id).exec();
+        const details = userdat[0];
 
         if (!user_id) {
             console.log('User not logged in');
             return res.status(401).send('Unauthorized');
         }
 
-        const weight = parseFloat(req.body.Weight); 
-        const height = parseFloat(userdat.details[0].height)/100;
+        const weight = parseFloat(req.body.Weight);
+        const height = parseFloat(userdat.details[0].height) / 100;
         const bmi = weight / (height * height);
-        const sex=converttobinary(userdat.details[0].gender);
+        const sex = converttobinary(userdat.details[0].gender);
         const userDetails = {
             HighBP: parseFloat(req.body.HighBP),
             HighChol: parseFloat(req.body.HighChol),
@@ -310,7 +308,7 @@ app.post('/formsubmitted', async (req, res) => {
             PhysHlth: parseFloat(req.body.PhysHlth),
             DiffWalk: parseFloat(req.body.DiffWalk),
             Sex: parseFloat(sex),
-            Age: parseFloat(classifyAge(userdat.details[0].age)), 
+            Age: parseFloat(classifyAge(userdat.details[0].age)),
         };
         console.log(convertToYesNo(req.body.CholCheck));
         const userDetailsforstorage = {
@@ -330,9 +328,9 @@ app.post('/formsubmitted', async (req, res) => {
             PhysHlth: String(req.body.PhysHlth),
             DiffWalk: convertToYesNo(req.body.DiffWalk),
             Sex: String(userdat.details[0].gender),
-            Age: String(userdat.details[0].age), 
-            Weight : String(req.body.Weight),  
-            Height : String(userdat.details[0].height),
+            Age: String(userdat.details[0].age),
+            Weight: String(req.body.Weight),
+            Height: String(userdat.details[0].height),
             pythonOutput: '',
         };
         console.log(userDetailsforstorage);
@@ -341,7 +339,10 @@ app.post('/formsubmitted', async (req, res) => {
         // const executeCommand = cd "C:\\Users\\CHARITHA BODIGE\\Desktop\\ML" && python ${pythonScriptPath} ${formDataString};
         // const executeCommand = cd "ML" && python ${pythonScriptPath} ${formDataString};
 
-        const pythonScriptAbsolutePath = "C:\\Users\\DELL\\OneDrive\\Desktop\\PP_Final\\PP_Final\\ML\\predict_model.py";
+        const path = require("path");
+
+        const pythonScriptPath = path.join(__dirname, "../ML/predict_model.py");
+
         const executeCommand = `python ${pythonScriptAbsolutePath} ${formDataString}`;
 
 
@@ -352,36 +353,35 @@ app.post('/formsubmitted', async (req, res) => {
         };
         exec(executeCommand, async (error, stdout, stderr) => {
             if (error) {
-              console.error(`Error: ${error.message}`);
-              return res.status(500).send('Internal Server Error');
+                console.error(`Error: ${error.message}`);
+                return res.status(500).send('Internal Server Error');
             }
-          
+
             let pythonOutput = stdout.trim();
             pythonOp = parseFloat(pythonOutput).toFixed(1);
             console.log(pythonOp);
-            pythonOutput=pythonOp.toString();
+            pythonOutput = pythonOp.toString();
 
-            newFormEntry.formValues.pythonOutput = pythonOutput; 
-            try{
-            await collection3
-              .findByIdAndUpdate(user_id, { $push: { formHistory: newFormEntry } }, { new: true })
+            newFormEntry.formValues.pythonOutput = pythonOutput;
+            try {
+                await collection3
+                    .findByIdAndUpdate(user_id, { $push: { formHistory: newFormEntry } }, { new: true })
                 console.log('Form entry and Python output updated successfully');
                 console.log(pythonOutput);
                 res.render('result', { pythonOutput });
                 riskPercentage = Math.round(pythonOutput);
             }
-            catch(err)
-            {
+            catch (err) {
                 console.log(err);
             }
-              })   
-        }
-        catch (error) {
-            console.error(error);
-            res.status(500).send('Internal Server Error');
-        }
+        })
     }
-        );
+    catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+);
 
 
 app.post('/previous-records', async (req, res) => {
@@ -403,25 +403,25 @@ app.post('/previous-records', async (req, res) => {
 });
 
 
-     
-     
+
+
 app.get('/sugg/:riskPercentage', (req, res) => {
     console.log(req.params.riskPercentage);
-    riskPercentage=req.params.riskPercentage;
+    riskPercentage = req.params.riskPercentage;
     res.redirect('/sugg');
-    
+
 });
 app.get('/sugg', (req, res) => {
     getRiskSuggestions(riskPercentage);
     function getRiskSuggestions(riskPercentage) {
-        if (riskPercentage <=25) {
-            res.render('sugg1',{riskPercentage})
+        if (riskPercentage <= 25) {
+            res.render('sugg1', { riskPercentage })
         } else if (riskPercentage <= 50) {
-            res.render('sugg2',{riskPercentage})
+            res.render('sugg2', { riskPercentage })
         } else if (riskPercentage <= 75) {
-            res.render('sugg3',{riskPercentage})
+            res.render('sugg3', { riskPercentage })
         } else {
-            res.render('sugg4',{riskPercentage})
+            res.render('sugg4', { riskPercentage })
         }
     }
 });
@@ -435,7 +435,7 @@ app.get("/sugg1", (req, res) => {
 app.get('/sugg1', (req, res) => {
     const riskPercentage = req.query.pythonOutputValue;
     // Use the pythonOutputValue as needed in your route logic
-    res.render('sugg1', { riskPercentage});
+    res.render('sugg1', { riskPercentage });
 });
 
 
@@ -455,7 +455,7 @@ app.get("/sugg4", (req, res) => {
 hbs.registerHelper('formatDate', (date) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return new Date(date).toLocaleDateString(undefined, options);
-  });
+});
 
 const PORT = process.env.PORT || 3000
 
